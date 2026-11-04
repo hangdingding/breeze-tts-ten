@@ -9,7 +9,7 @@ def test_params_defaults():
     assert params.base_url == "https://api.breeze.blue"
     assert params.voice_id == "voc_u3nxkd5578wc"
     assert params.sample_rate == 24000
-    assert params.output_format == "pcm_24000"
+    assert params.output_format == "pcm"
 
 
 def test_config_from_dict():

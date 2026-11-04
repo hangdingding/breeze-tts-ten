@@ -22,7 +22,7 @@ design.
 | `instructions` | `instructions` |
 | `speed` | `voice_settings.speed` |
 | `language` | `language_code` |
-| audio | `output_format=pcm_24000` |
+| audio | `output_format=pcm` |
 
 ## Configuration
 
@@ -38,7 +38,7 @@ design.
     "speed": 1.0,
     "instructions": "",
     "sample_rate": 24000,
-    "output_format": "pcm_24000",
+    "output_format": "pcm",
     "timeout": 60
   }
 }

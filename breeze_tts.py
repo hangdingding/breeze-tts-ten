@@ -30,7 +30,7 @@ class BreezeTTSParams(BaseModel):
     instructions: str = Field(default="", description="Optional style instructions")
     sample_rate: int = Field(default=24000, description="PCM sample rate in Hz")
     output_format: str = Field(
-        default="pcm_24000", description="Breeze output format query value"
+        default="pcm", description="Breeze output format query value"
     )
     timeout: int = Field(default=60, description="HTTP timeout in seconds")
 
