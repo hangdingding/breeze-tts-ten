@@ -57,11 +57,3 @@ class BreezeTTSExtension(AsyncTTS2HttpExtension):
     def synthesize_audio_sample_rate(self) -> int:
         return SAMPLE_RATE
 
-    async def request_tts(self, t) -> None:  # pragma: no cover - debug only
-        self.ten_env.log_info(
-            f"[breeze-debug] request_tts text={t.text!r} rid={t.request_id} "
-            f"end={t.text_input_end} cur={getattr(self, 'current_request_id', None)} "
-            f"first={getattr(self, 'first_chunk', None)} "
-            f"state={self.request_states.get(t.request_id)}"
-        )
-        await super().request_tts(t)
