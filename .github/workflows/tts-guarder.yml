@@ -38,7 +38,7 @@ jobs:
         run: |
           cd ten/ai_agents
           export PYTHONUNBUFFERED=1
-          task tts-guarder-test EXTENSION=breeze_tts_python CONFIG_DIR=tests/configs -- -v -s -x tests/test_basic_audio_setting.py
+          task tts-guarder-test EXTENSION=breeze_tts_python CONFIG_DIR=tests/configs -- -v
 
       - name: Upload PCM dumps
         if: always()
