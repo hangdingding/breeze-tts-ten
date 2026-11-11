@@ -31,9 +31,12 @@ class BreezeTTSExtension(AsyncTTS2HttpExtension):
         super().__init__(name)
         self.config: BreezeTTSConfig | None = None
         self.client: BreezeTTSClient | None = None
+        self._sample_rate: int = SAMPLE_RATE
 
     async def create_config(self, config_json_str: str) -> AsyncTTS2HttpConfig:
-        return BreezeTTSConfig.model_validate_json(config_json_str)
+        config = BreezeTTSConfig.model_validate_json(config_json_str)
+        self._sample_rate = config.params.sample_rate
+        return config
 
     async def create_client(
         self, config: AsyncTTS2HttpConfig, ten_env: AsyncTenEnv
@@ -55,5 +58,5 @@ class BreezeTTSExtension(AsyncTTS2HttpExtension):
         }
 
     def synthesize_audio_sample_rate(self) -> int:
-        return SAMPLE_RATE
+        return self._sample_rate
 
