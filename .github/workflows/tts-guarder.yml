@@ -37,7 +37,6 @@ jobs:
       - name: Run tts guarder
         run: |
           cd ten/ai_agents
-          export PYTHONPATH="$PWD/agents:$PYTHONPATH"
           task tts-guarder-test EXTENSION=breeze_tts_python CONFIG_DIR=tests/configs -- -v
 
       - name: Upload PCM dumps
