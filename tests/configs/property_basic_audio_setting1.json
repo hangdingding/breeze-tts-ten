@@ -7,6 +7,7 @@
         "voice_id": "voc_u3nxkd5578wc",
         "language": "zh",
         "speed": 1.0,
-        "instructions": ""
+        "instructions": "",
+        "sample_rate": 24000
     }
 }
