@@ -2,6 +2,11 @@ name: TTS Guarder
 
 on:
   workflow_dispatch:
+    inputs:
+      extra_args:
+        description: "extra pytest args (empty = full default suite)"
+        required: false
+        default: ""
 
 permissions:
   contents: read
