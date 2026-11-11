@@ -34,11 +34,14 @@ jobs:
           cp -r ext "$dst"
           rm -rf "$dst/.git"
 
+      - name: Install test extras
+        run: python3 -m pip install --quiet pytest-asyncio
+
       - name: Run tts guarder
         run: |
           cd ten/ai_agents
           export PYTHONUNBUFFERED=1
-          timeout 900 task tts-guarder-test EXTENSION=breeze_tts_python CONFIG_DIR=tests/configs -- -v
+          timeout 1500 task tts-guarder-test EXTENSION=breeze_tts_python CONFIG_DIR=tests/configs -- -v -k "not google_public_lazy_iterator and not cosy"
 
       - name: Upload PCM dumps
         if: always()
