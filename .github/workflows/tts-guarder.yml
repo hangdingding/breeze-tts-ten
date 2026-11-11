@@ -49,6 +49,5 @@ jobs:
         with:
           name: breeze-pcm
           path: |
-            ten/ai_agents/tests/keep_dump_output/**
-            ten/ai_agents/agents/ten_packages/extension/breeze_tts_python/tests/keep_dump_output/**
+            ten/ai_agents/**/keep_dump_output/**
           if-no-files-found: warn
