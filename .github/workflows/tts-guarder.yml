@@ -38,7 +38,7 @@ jobs:
         run: |
           cd ten/ai_agents
           export PYTHONUNBUFFERED=1
-          timeout 240 task tts-guarder-test EXTENSION=breeze_tts_python CONFIG_DIR=tests/configs -- -v -x tests/test_basic_audio_setting.py
+          timeout 900 task tts-guarder-test EXTENSION=breeze_tts_python CONFIG_DIR=tests/configs -- -v -k "not append"
 
       - name: Upload PCM dumps
         if: always()
