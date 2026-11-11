@@ -13,7 +13,12 @@ from typing_extensions import override
 
 from ten_ai_base.const import LOG_CATEGORY_KEY_POINT, LOG_CATEGORY_VENDOR
 from ten_ai_base.dumper import Dumper
-from ten_ai_base.message import ModuleError, ModuleErrorCode, TTSAudioEndReason
+from ten_ai_base.message import (
+    ModuleError,
+    ModuleErrorCode,
+    ModuleErrorVendorInfo,
+    TTSAudioEndReason,
+)
 from ten_ai_base.struct import TTSTextInput
 from ten_ai_base.tts2 import AsyncTTS2BaseExtension
 from ten_runtime import AsyncTenEnv
@@ -43,7 +48,7 @@ class BreezeTTSExtension(AsyncTTS2BaseExtension):
     @override
     async def on_init(self, ten_env: AsyncTenEnv) -> None:
         await super().on_init(ten_env)
-        config_json, _ = await ten_env.get_property_to_json()
+        config_json, _ = await ten_env.get_property_to_json("")
         try:
             self.config = BreezeTTSConfig.model_validate_json(config_json)
             ten_env.log_info(
@@ -84,6 +89,15 @@ class BreezeTTSExtension(AsyncTTS2BaseExtension):
                 "vendor_status: tts client is not ready",
                 category=LOG_CATEGORY_VENDOR,
             )
+            await self.send_tts_error(
+                t.request_id,
+                ModuleError(
+                    message="Breeze TTS client is not initialized",
+                    module="tts",
+                    code=ModuleErrorCode.FATAL_ERROR.value,
+                    vendor_info=ModuleErrorVendorInfo(vendor="breeze"),
+                ),
+            )
             return
         if not t.text.strip():
             return
@@ -123,6 +137,13 @@ class BreezeTTSExtension(AsyncTTS2BaseExtension):
                 if self.audio_dumper is not None:
                     await self._dump(request_id, chunk)
         except asyncio.CancelledError:
+            if started:
+                await self.send_tts_audio_end(
+                    request_id,
+                    int((time.time() - request_start) * 1000),
+                    total_duration_ms,
+                    reason=TTSAudioEndReason.INTERRUPTED,
+                )
             return
         except Exception as error:
             self.ten_env.log_error(
@@ -135,6 +156,9 @@ class BreezeTTSExtension(AsyncTTS2BaseExtension):
                     message=str(error),
                     module="tts",
                     code=ModuleErrorCode.NON_FATAL_ERROR.value,
+                    vendor_info=ModuleErrorVendorInfo(
+                        vendor="breeze", message=str(error)
+                    ),
                 ),
             )
             if started:
