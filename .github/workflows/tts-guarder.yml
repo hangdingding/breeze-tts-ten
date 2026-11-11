@@ -1,0 +1,48 @@
+name: TTS Guarder
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  guarder:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/ten-framework/ten_agent_build:0.7.14
+    env:
+      BREEZE_API_KEY: ${{ secrets.BREEZE_API_KEY }}
+    steps:
+      - name: Checkout extension
+        uses: actions/checkout@v4
+        with:
+          path: ext
+
+      - name: Checkout TEN framework
+        uses: actions/checkout@v4
+        with:
+          repository: TEN-framework/ten-framework
+          ref: main
+          path: ten
+          fetch-depth: 1
+
+      - name: Install extension into TEN
+        run: |
+          dst=ten/ai_agents/agents/ten_packages/extension/breeze_tts_python
+          rm -rf "$dst"
+          cp -r ext "$dst"
+          rm -rf "$dst/.git"
+
+      - name: Run tts guarder
+        run: |
+          cd ten/ai_agents
+          task tts-guarder-test EXTENSION=breeze_tts_python CONFIG_DIR=tests/configs -- -v
+
+      - name: Upload PCM dumps
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: breeze-pcm
+          path: ten/ai_agents/agents/ten_packages/extension/breeze_tts_python/tests/keep_dump_output/**
+          if-no-files-found: warn
