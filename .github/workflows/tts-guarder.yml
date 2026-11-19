@@ -27,8 +27,8 @@ jobs:
       - name: Checkout TEN framework
         uses: actions/checkout@v4
         with:
-          repository: TEN-framework/ten-framework
-          ref: main
+          repository: hangdingding/ten-framework
+          ref: feat/breeze-tts-extension
           path: ten
           fetch-depth: 1
 
