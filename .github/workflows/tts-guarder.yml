@@ -50,8 +50,6 @@ jobs:
           cd ten/ai_agents
           export PYTHONUNBUFFERED=1
           timeout 1500 task tts-guarder-test EXTENSION=breeze_tts_python CONFIG_DIR=tests/configs -- -v
-            --deselect tests/test_provider_ttfb_hooks.py::test_http_adapter_hook_tracks_input_and_first_audio
-            --deselect tests/test_provider_ttfb_hooks.py::test_cosy_hook_binds_late_audio_to_original_callback
 
       - name: Upload PCM dumps
         if: always()
