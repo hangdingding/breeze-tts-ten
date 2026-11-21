@@ -89,6 +89,12 @@ jobs:
       - name: Install lint imports
         run: python3 -m pip install --quiet aiohttp pydantic
 
+      - name: Build agent deps (same as upstream CI)
+        run: |
+          cd ten/ai_agents
+          git config --global --add safe.directory "$(pwd)"
+          timeout 1800 task build-agent-deps
+
       - name: Format check (task check)
         run: |
           cd ten/ai_agents
