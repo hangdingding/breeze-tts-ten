@@ -77,7 +77,7 @@ jobs:
           ref: feat/breeze-tts-extension
           path: ten
           fetch-depth: 1
-          submodules: true
+          submodules: recursive
 
       - name: Install extension into TEN
         run: |
