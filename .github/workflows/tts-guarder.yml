@@ -59,3 +59,39 @@ jobs:
           path: |
             ten/ai_agents/**/keep_dump_output/**
           if-no-files-found: warn
+
+  upstream-ci:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/ten-framework/ten_agent_build:0.7.14
+    steps:
+      - name: Checkout extension
+        uses: actions/checkout@v4
+        with:
+          path: ext
+
+      - name: Checkout TEN framework
+        uses: actions/checkout@v4
+        with:
+          repository: hangdingding/ten-framework
+          ref: feat/breeze-tts-extension
+          path: ten
+          fetch-depth: 1
+
+      - name: Install extension into TEN
+        run: |
+          dst=ten/ai_agents/agents/ten_packages/extension/breeze_tts_python
+          rm -rf "$dst"
+          cp -r ext "$dst"
+          rm -rf "$dst/.git"
+
+      - name: Format check (task check)
+        run: |
+          cd ten/ai_agents
+          git config --global --add safe.directory "$(pwd)"
+          task check
+
+      - name: Lint (task lint-extension)
+        run: |
+          cd ten/ai_agents
+          task lint-extension EXTENSION=breeze_tts_python
